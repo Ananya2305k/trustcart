@@ -1,0 +1,60 @@
+# Full stack: MongoDB (replica set, required for transactions), API, AI service, web.
+#
+#   JWT_SECRET=<long random string> docker compose up --build
+#
+# Web:  http://localhost:8080     API: http://localhost:5000/api/health
+services:
+  mongo:
+    image: mongo:8
+    command: ["--replSet", "rs0", "--bind_ip_all"]
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      # Initiates the single-node replica set the first time, then reports healthy.
+      test:
+        - CMD
+        - mongosh
+        - --quiet
+        - --eval
+        - "try { rs.status().ok } catch (e) { rs.initiate({_id:'rs0',members:[{_id:0,host:'mongo:27017'}]}).ok }"
+      interval: 5s
+      timeout: 10s
+      retries: 20
+      start_period: 10s
+
+  ai-service:
+    build: ./ai-service
+    environment:
+      # Optional. Without a key, suggested replies come from templates.
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+
+  server:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    depends_on:
+      mongo:
+        condition: service_healthy
+      ai-service:
+        condition: service_started
+    environment:
+      PORT: 5000
+      MONGODB_URI: mongodb://mongo:27017/trustcart?replicaSet=rs0
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET to a long random string}
+      CORS_ORIGIN: http://localhost:8080
+      AI_SERVICE_URL: http://ai-service:8000
+    ports:
+      - "5000:5000"
+
+  web:
+    build:
+      context: .
+      args:
+        VITE_API_URL: http://localhost:5000/api
+    depends_on:
+      - server
+    ports:
+      - "8080:80"
+
+volumes:
+  mongo-data:

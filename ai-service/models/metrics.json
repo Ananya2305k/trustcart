@@ -1,0 +1,57 @@
+{
+  "model_version": "tfidf-logreg-1",
+  "cv_macro_f1_mean": 0.7982,
+  "cv_macro_f1_std": 0.0685,
+  "data_file": "tickets.csv",
+  "train_rows": 840,
+  "test_rows": 280,
+  "accuracy": 0.7964,
+  "macro_precision": 0.8155,
+  "macro_recall": 0.8192,
+  "macro_f1": 0.7981,
+  "per_class": {
+    "Account": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 40
+    },
+    "Delivery": {
+      "precision": 0.32,
+      "recall": 0.6667,
+      "f1": 0.4324,
+      "support": 24
+    },
+    "General": {
+      "precision": 0.9091,
+      "recall": 1.0,
+      "f1": 0.9524,
+      "support": 40
+    },
+    "Order Change": {
+      "precision": 0.9024,
+      "recall": 0.6607,
+      "f1": 0.7629,
+      "support": 56
+    },
+    "Payment": {
+      "precision": 0.7273,
+      "recall": 1.0,
+      "f1": 0.8421,
+      "support": 24
+    },
+    "Product Quality": {
+      "precision": 0.85,
+      "recall": 0.6071,
+      "f1": 0.7083,
+      "support": 56
+    },
+    "Refund & Return": {
+      "precision": 1.0,
+      "recall": 0.8,
+      "f1": 0.8889,
+      "support": 40
+    }
+  },
+  "note": "Measured on held-out complaints from the SYNTHETIC template dataset. Not a prediction of real-world accuracy."
+}

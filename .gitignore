@@ -1,0 +1,19 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+*.tsbuildinfo
+
+# Python
+__pycache__/
+.pytest_cache/
+.venv/
+ai-service/models/*.joblib
+
+# Research outputs and data
+research/delivery-promise/results/
+research/delivery-promise/synthetic_data/
+research/**/*.csv
